@@ -1,0 +1,9 @@
+<resources>
+    <string name="app_name">城院小小气象站</string>
+    <string name="username">用户名</string>
+    <string name="userpassword">密码</string>
+    <string name="login">登录</string>
+    <string name="regist">注册</string>
+    <string name="userpassword2">确认密码</string>
+    <string name="usermail">邮箱</string>
+</resources>
