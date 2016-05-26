@@ -1,5 +1,6 @@
 package ubibots.zuccweatherbase.registandlogin.control;
 
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.widget.Toast;
 
@@ -11,6 +12,7 @@ import java.util.concurrent.ExecutionException;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import ubibots.zuccweatherbase.displayhistory.DisplayHistoryActivity;
 import ubibots.zuccweatherbase.registandlogin.RegistAndLoginActivity;
 import ubibots.zuccweatherbase.registandlogin.intrfc.IUserManager;
 import ubibots.zuccweatherbase.registandlogin.ui.FrmLogin;
@@ -51,6 +53,7 @@ public class UserManager implements IUserManager {
                 }
             } catch (SQLException e) {
                 e.printStackTrace();
+                ret = "网络连接中断";
             } finally {
                 if (conn != null) {
                     try {
@@ -78,6 +81,16 @@ public class UserManager implements IUserManager {
         String ret = null;
         try {
             ret = new ExecuteLogin().execute(userName, userPassword).get();
+            if(ret.equals("欢迎使用")){
+                /* 新建一个Intent对象 */
+                Intent intent = new Intent();
+                /* 指定intent要启动的类 */
+                intent.setClass(RegistAndLoginActivity.getRegistAndLoginActivity(), DisplayHistoryActivity.class);
+                /* 启动一个新的Activity */
+                RegistAndLoginActivity.getRegistAndLoginActivity().startActivity(intent);
+                /* 关闭当前的Activity */
+                RegistAndLoginActivity.getRegistAndLoginActivity().finish();
+            }
         } catch (InterruptedException | ExecutionException e) {
             e.printStackTrace();
         }
@@ -142,6 +155,7 @@ public class UserManager implements IUserManager {
                 ret = "欢迎使用";
             } catch (SQLException e) {
                 e.printStackTrace();
+                ret = "网络连接中断";
             } finally {
                 if (conn != null) {
                     try {
