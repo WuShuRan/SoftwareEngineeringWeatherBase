@@ -1,6 +1,3 @@
-/**
- * @Means 一步一步创建小时数据
- */
 package ubibots.zuccweatherbase.displayhistory.control;
 
 import android.os.AsyncTask;
@@ -22,6 +19,7 @@ import ubibots.zuccweatherbase.displayhistory.ui.DayView;
 import ubibots.zuccweatherbase.displayhistory.util.RequestUtil;
 
 public class RequestDayStep extends AsyncTask<String, Integer, String> {
+
     public final static int MAX = 48;
     private BeanTabMessage day;
     private String strURL;
@@ -111,7 +109,6 @@ public class RequestDayStep extends AsyncTask<String, Integer, String> {
     @Override
     protected void onPreExecute() {
     }
-
 
     public void reconnect(String strURL, BeanTabMessage day) {
         RequestDayStep another = new RequestDayStep(day, time + 1);

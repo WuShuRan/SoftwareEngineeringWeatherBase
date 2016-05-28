@@ -16,27 +16,13 @@ import lecho.lib.hellocharts.model.AxisValue;
 import lecho.lib.hellocharts.model.Line;
 import lecho.lib.hellocharts.model.LineChartData;
 import lecho.lib.hellocharts.model.PointValue;
+
 import ubibots.zuccweatherbase.displayhistory.model.BeanConstant;
 import ubibots.zuccweatherbase.displayhistory.model.BeanLineView;
 import ubibots.zuccweatherbase.displayhistory.model.BeanTabMessage;
 import ubibots.zuccweatherbase.registandlogin.RegistAndLoginActivity;
 
 public class RequestUtil {
-    public static String addParameter(String path, Map<String, String> params) {
-        String URL = path;
-        if (params != null && URL.length() != 0) {
-            for (Map.Entry<String, String> entry : params.entrySet()) {
-                try {
-                    URL += entry.getKey() + "=" + entry.getValue();
-                } catch (Exception ex) {
-                    ex.printStackTrace();
-                }
-                URL += "&";
-            }
-            URL = URL.substring(0, URL.length() - 1);
-        }
-        return URL;
-    }
 
     public static String UTCDateFormat(Calendar calendar) {
         String UTCDate;
@@ -300,6 +286,22 @@ public class RequestUtil {
         strUrl = RequestUtil.addParameter(strUrl, params);
 
         return strUrl;
+    }
+
+    public static String addParameter(String path, Map<String, String> params) {
+        String URL = path;
+        if (params != null && URL.length() != 0) {
+            for (Map.Entry<String, String> entry : params.entrySet()) {
+                try {
+                    URL += entry.getKey() + "=" + entry.getValue();
+                } catch (Exception ex) {
+                    ex.printStackTrace();
+                }
+                URL += "&";
+            }
+            URL = URL.substring(0, URL.length() - 1);
+        }
+        return URL;
     }
 
     public static Calendar dateToCalender(String string, String format){

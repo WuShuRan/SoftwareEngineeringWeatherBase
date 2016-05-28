@@ -12,8 +12,17 @@ import ubibots.zuccweatherbase.R;
 import ubibots.zuccweatherbase.displayhistory.DisplayHistoryActivity;
 
 public class ListTab {
+
     private int currentTab;
     private ListView listView;
+
+    public int getCurrentTab(){
+        return currentTab;
+    }
+
+    public ListView getListView(){
+        return listView;
+    }
 
     public ListTab(){
         listView = (ListView) DisplayHistoryActivity.getActivity().findViewById(R.id.listview);
@@ -22,7 +31,6 @@ public class ListTab {
         final List<String> data = new ArrayList<>();
         data.add("每时");
         data.add("每日");
-        data.add("每周");
         ArrayAdapter<String> arrayAdapter = new ArrayAdapter<>(DisplayHistoryActivity.getActivity(), android.R.layout.simple_expandable_list_item_1, data);
         listView.setAdapter(arrayAdapter);
         listView.setOnItemClickListener((parent, view, position, id) -> {
@@ -35,10 +43,6 @@ public class ListTab {
                 case "每日":
                     dayVisible();
                     currentTab = 1;
-                    break;
-                case "每周":
-                    hourInvisible();
-                    currentTab = 2;
                     break;
             }
         });
@@ -82,13 +86,5 @@ public class ListTab {
                 DayView.getDayProgressBar().setVisibility(View.INVISIBLE);
             }
         }
-    }
-
-    public int getCurrentTab(){
-        return currentTab;
-    }
-
-    public ListView getListView(){
-        return listView;
     }
 }

@@ -19,8 +19,8 @@ import ubibots.zuccweatherbase.displayhistory.model.BeanTabMessage;
 import ubibots.zuccweatherbase.displayhistory.ui.DayView;
 import ubibots.zuccweatherbase.displayhistory.util.RequestUtil;
 
-
 public class RequestDayHistory extends AsyncTask<String, Integer, String> {
+
     public final static int MAX = 48;
     private BeanTabMessage day;
     private int id;

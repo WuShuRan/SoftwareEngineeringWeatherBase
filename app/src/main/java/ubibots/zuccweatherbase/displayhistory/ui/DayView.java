@@ -19,12 +19,14 @@ import java.util.List;
 import lecho.lib.hellocharts.gesture.ContainerScrollType;
 import lecho.lib.hellocharts.gesture.ZoomType;
 import lecho.lib.hellocharts.view.LineChartView;
+
 import ubibots.zuccweatherbase.R;
 import ubibots.zuccweatherbase.displayhistory.DisplayHistoryActivity;
 import ubibots.zuccweatherbase.displayhistory.model.BeanLineView;
 import ubibots.zuccweatherbase.displayhistory.model.BeanTabMessage;
 
 public class DayView {
+
     private static BeanLineView dayBeanLineView;
     private static BeanTabMessage day;
     private static List<View> dayViewList;
@@ -53,39 +55,7 @@ public class DayView {
         DayView.day = day;
     }
 
-    private PagerAdapter dayPagerAdapter = new PagerAdapter() {
-        //官方建议这么写
-        @Override
-        public boolean isViewFromObject(View arg0, Object arg1) {
-            return arg0 == arg1;
-        }
-
-        //返回一共有多少个界面
-        @Override
-        public int getCount() {
-            return dayViewList.size();
-        }
-
-        //实例化一个item
-        @Override
-        public Object instantiateItem(ViewGroup container, int position) {
-            container.addView(dayViewList.get(position));
-            return dayViewList.get(position);
-        }
-
-        //销毁一个item
-        @Override
-        public void destroyItem(ViewGroup container, int position, Object object) {
-            container.removeView(dayViewList.get(position));
-        }
-
-    };
-
     public DayView() {
-        dayViewInit();
-    }
-
-    private void dayViewInit() {
         dayViewPager = (ViewPager) DisplayHistoryActivity.getActivity().findViewById(R.id.dayView);
         dayViewList = new ArrayList<>();
         View view1 = View.inflate(DisplayHistoryActivity.getContext(), R.layout.temperatureday, null);
@@ -105,6 +75,33 @@ public class DayView {
         dayBeanLineView = new BeanLineView(temperatureDayView, humidityDayView);
 
         initDayDots();
+        PagerAdapter dayPagerAdapter = new PagerAdapter() {
+            //官方建议这么写
+            @Override
+            public boolean isViewFromObject(View arg0, Object arg1) {
+                return arg0 == arg1;
+            }
+
+            //返回一共有多少个界面
+            @Override
+            public int getCount() {
+                return dayViewList.size();
+            }
+
+            //实例化一个item
+            @Override
+            public Object instantiateItem(ViewGroup container, int position) {
+                container.addView(dayViewList.get(position));
+                return dayViewList.get(position);
+            }
+
+            //销毁一个item
+            @Override
+            public void destroyItem(ViewGroup container, int position, Object object) {
+                container.removeView(dayViewList.get(position));
+            }
+
+        };
         dayViewPager.setAdapter(dayPagerAdapter);
         dayViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override

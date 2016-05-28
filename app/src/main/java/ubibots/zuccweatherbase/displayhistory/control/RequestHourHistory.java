@@ -1,6 +1,3 @@
-/**
- * @Means 一次性获取历史数据
- */
 package ubibots.zuccweatherbase.displayhistory.control;
 
 import android.os.AsyncTask;
@@ -23,6 +20,7 @@ import ubibots.zuccweatherbase.displayhistory.ui.HourView;
 import ubibots.zuccweatherbase.displayhistory.util.RequestUtil;
 
 public class RequestHourHistory extends AsyncTask<String, Integer, String> {
+
     public final static int MAX = 120;
     private BeanTabMessage hour;
     private int id;

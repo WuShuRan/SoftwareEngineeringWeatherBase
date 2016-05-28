@@ -1,6 +1,7 @@
 package ubibots.zuccweatherbase.displayhistory.model;
 
 public class BeanConstant {
+
     public final static int MAXTIME = 3;
     public final static float UPTEMP = (float)19.9;
     public final static float DOWNTEMP = 14;

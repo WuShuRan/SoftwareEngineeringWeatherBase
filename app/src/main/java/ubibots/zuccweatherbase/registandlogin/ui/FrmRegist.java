@@ -11,6 +11,7 @@ import ubibots.zuccweatherbase.registandlogin.RegistAndLoginActivity;
 import ubibots.zuccweatherbase.registandlogin.control.UserManager;
 
 public class FrmRegist {
+
     private String tmpUserName;
     private String tmpUserMail;
     private String tmpUserPassword;

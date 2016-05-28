@@ -21,23 +21,43 @@ import ubibots.zuccweatherbase.registandlogin.util.RegistAndLoginUtil;
 
 public class UserManager implements IUserManager {
 
+    @Override
+    public String login(String userName, String userPassword) {
+        String ret = null;
+        try {
+            ret = new ExecuteLogin().execute(userName, userPassword).get();
+            if(ret.equals("欢迎使用")) {
+                if (RegistAndLoginActivity.getRegistAndLoginActivity() != null) {
+                /* 新建一个Intent对象 */
+                    Intent intent = new Intent();
+                /* 指定intent要启动的类 */
+                    intent.setClass(RegistAndLoginActivity.getRegistAndLoginActivity(), DisplayHistoryActivity.class);
+                /* 启动一个新的Activity */
+                    RegistAndLoginActivity.getRegistAndLoginActivity().startActivity(intent);
+                /* 关闭当前的Activity */
+                    RegistAndLoginActivity.getRegistAndLoginActivity().finish();
+                }
+            }
+        } catch (InterruptedException | ExecutionException e) {
+            e.printStackTrace();
+        }
+        return ret;
+    }
+
     public class ExecuteLogin extends AsyncTask<String, Integer, String> {
         //该方法并不运行在UI线程当中，主要用于异步操作，所有在该方法中不能对UI当中的空间进行设置和修改
         String testResult = null;
 
         @Override
         protected String doInBackground(String... params) {
-            String ret = "";
-            if ("".equals(params[0])) {
-                ret = "用户名不能为空";
-            } else if ("".equals(params[1])) {
-                ret = "邮箱不能为空";
-            }
-            if (!"".equals(ret)) {
-                return ret;
-            }
             Connection conn = null;
+            String ret = "";
             try {
+                if ("".equals(params[0])) {
+                    ret = "用户名不能为空";
+                    return ret;
+                }
+
                 conn = DBUtil.getConnection();
                 String sql = "select userpassword from beanuser where username " +
                         "= ?";
@@ -46,11 +66,19 @@ public class UserManager implements IUserManager {
                 ResultSet rs = pst.executeQuery();
                 if (!rs.next()) {
                     ret = "用户名不存在";
-                } else if (!RegistAndLoginUtil.MD5Encrypt(params[1]).equals(rs.getString(1))) {
-                    ret = "密码不正确";
-                } else {
-                    ret = "欢迎使用";
+                    return ret;
                 }
+
+                if ("".equals(params[1])) {
+                    ret = "密码不能为空";
+                    return ret;
+                }
+
+                if (!RegistAndLoginUtil.MD5Encrypt(params[1]).equals(rs.getString(1))) {
+                    ret = "密码不正确";
+                    return ret;
+                }
+                ret = "欢迎使用";
             } catch (SQLException e) {
                 e.printStackTrace();
                 ret = "网络连接中断";
@@ -77,20 +105,10 @@ public class UserManager implements IUserManager {
     }
 
     @Override
-    public String login(String userName, String userPassword) {
+    public String regist(String userName, String userMail, String userPassword, String userPassword2) {
         String ret = null;
         try {
-            ret = new ExecuteLogin().execute(userName, userPassword).get();
-            if(ret.equals("欢迎使用")){
-                /* 新建一个Intent对象 */
-                Intent intent = new Intent();
-                /* 指定intent要启动的类 */
-                intent.setClass(RegistAndLoginActivity.getRegistAndLoginActivity(), DisplayHistoryActivity.class);
-                /* 启动一个新的Activity */
-                RegistAndLoginActivity.getRegistAndLoginActivity().startActivity(intent);
-                /* 关闭当前的Activity */
-                RegistAndLoginActivity.getRegistAndLoginActivity().finish();
-            }
+            ret = new ExecuteRegist().execute(userName, userMail, userPassword, userPassword2).get();
         } catch (InterruptedException | ExecutionException e) {
             e.printStackTrace();
         }
@@ -102,29 +120,13 @@ public class UserManager implements IUserManager {
         @Override
         protected String doInBackground(String... params) {
             String ret = "";
-            if ("".equals(params[0])) {
-                ret = "用户名不能为空";
-            } else if ("".equals(params[1])) {
-                ret = "邮箱不能为空";
-            } else if ("".equals(params[2])) {
-                ret = "密码不能为空";
-            } else if ("".equals(params[3])) {
-                ret = "确认密码不能为空";
-            } else if (!params[2].equals(params[3])) {
-                ret = "密码和确认密码不一致";
-            } else {
-                String check = "^([a-z0-9A-Z]+[-|\\.]?)+[a-z0-9A-Z]@([a-z0-9A-Z]+(-[a-z0-9A-Z]+)?\\.)+[a-zA-Z]{2,}$";
-                Pattern regex = Pattern.compile(check);
-                Matcher matcher = regex.matcher(params[1]);
-                if (!matcher.matches()) {
-                    ret = "邮箱格式不对";
-                }
-            }
-            if (!"".equals(ret)) {
-                return ret;
-            }
             Connection conn = null;
             try {
+                if ("".equals(params[0])) {
+                    ret = "用户名不能为空";
+                    return ret;
+                }
+
                 conn = DBUtil.getConnection();
                 String sql = "select * from beanuser where username = ?";
                 PreparedStatement pst = conn.prepareStatement(sql);
@@ -135,6 +137,20 @@ public class UserManager implements IUserManager {
                     return ret;
                 }
                 conn.close();
+
+                if ("".equals(params[1])) {
+                    ret = "邮箱不能为空";
+                    return ret;
+                }
+
+                String check = "^([a-z0-9A-Z]+[-|\\.]?)+[a-z0-9A-Z]@([a-z0-9A-Z]+(-[a-z0-9A-Z]+)?\\.)+[a-zA-Z]{2,}$";
+                Pattern regex = Pattern.compile(check);
+                Matcher matcher = regex.matcher(params[1]);
+                if (!matcher.matches()) {
+                    ret = "邮箱格式不对";
+                    return ret;
+                }
+
                 conn = DBUtil.getConnection();
                 sql = "select * from beanuser where usermail = ?";
                 pst = conn.prepareStatement(sql);
@@ -145,6 +161,18 @@ public class UserManager implements IUserManager {
                     return ret;
                 }
                 conn.close();
+
+                if ("".equals(params[2])) {
+                    ret = "密码不能为空";
+                } else if ("".equals(params[3])) {
+                    ret = "确认密码不能为空";
+                } else if (!params[2].equals(params[3])) {
+                    ret = "密码和确认密码不一致";
+                }
+                if (!"".equals(ret)) {
+                    return ret;
+                }
+
                 conn = DBUtil.getConnection();
                 sql = "insert into beanuser(username, usermail, userpassword) values(?,?,?)";
                 pst = conn.prepareStatement(sql);
@@ -188,10 +216,10 @@ public class UserManager implements IUserManager {
     }
 
     @Override
-    public String regist(String userName, String userMail, String userPassword, String userPassword2) {
+    public String remove(String userName) {
         String ret = null;
         try {
-            ret = new ExecuteRegist().execute(userName, userMail, userPassword, userPassword2).get();
+            ret = new ExecuteRemove().execute(userName).get();
         } catch (InterruptedException | ExecutionException e) {
             e.printStackTrace();
         }
@@ -243,16 +271,5 @@ public class UserManager implements IUserManager {
         @Override
         protected void onPostExecute(String result) {
         }
-    }
-
-    @Override
-    public String remove(String userName) {
-        String ret = null;
-        try {
-            ret = new ExecuteRemove().execute(userName).get();
-        } catch (InterruptedException | ExecutionException e) {
-            e.printStackTrace();
-        }
-        return ret;
     }
 }

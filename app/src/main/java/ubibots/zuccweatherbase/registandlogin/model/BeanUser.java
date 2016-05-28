@@ -1,6 +1,7 @@
 package ubibots.zuccweatherbase.registandlogin.model;
 
 public class BeanUser {
+
     private int userid;
     private String userName;
     private String userMail;

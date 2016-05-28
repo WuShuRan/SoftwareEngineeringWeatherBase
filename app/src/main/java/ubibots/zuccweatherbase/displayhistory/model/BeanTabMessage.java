@@ -3,6 +3,7 @@ package ubibots.zuccweatherbase.displayhistory.model;
 import java.util.ArrayList;
 
 public class BeanTabMessage {
+
     public int count = 0;
     private ArrayList<Double> temperature;
     private ArrayList<Double> humidity;

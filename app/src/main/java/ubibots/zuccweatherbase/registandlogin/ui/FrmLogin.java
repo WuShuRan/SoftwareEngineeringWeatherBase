@@ -1,6 +1,5 @@
 package ubibots.zuccweatherbase.registandlogin.ui;
 
-
 import android.support.v4.content.ContextCompat;
 import android.widget.Button;
 import android.widget.EditText;
@@ -11,6 +10,7 @@ import ubibots.zuccweatherbase.registandlogin.RegistAndLoginActivity;
 import ubibots.zuccweatherbase.registandlogin.util.RegistAndLoginUtil;
 
 public class FrmLogin {
+
     private EditText userName;
     private EditText userPassword;
     public static FrmRegist frmRegist;

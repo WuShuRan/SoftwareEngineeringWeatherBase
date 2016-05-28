@@ -16,22 +16,11 @@ import ubibots.zuccweatherbase.displayhistory.ui.DayView;
 import ubibots.zuccweatherbase.displayhistory.util.RequestUtil;
 
 public class RequestDay {
+
     private static RequestDayHandler requestDayHandler;
 
     public RequestDay(){
         requestDayHandler = new RequestDayHandler();
-    }
-
-    public static void dayHistory(BeanTabMessage day, Calendar calendar, int id) {
-        String strUrl = RequestUtil.combineUrl((Calendar) calendar.clone());
-        RequestDayHistory request = new RequestDayHistory(day, id, 0);
-        request.execute(strUrl);
-    }
-
-    public static void dayStep(BeanTabMessage day, Calendar calendar) {
-        String strUrl = RequestUtil.combineUrl((Calendar) calendar.clone());
-        RequestDayStep request = new RequestDayStep(day, 0);
-        request.execute(strUrl);
     }
 
     public void executeRequest(){
@@ -48,6 +37,12 @@ public class RequestDay {
 
         Toast.makeText(DisplayHistoryActivity.getContext(), "正在获取数据中,请耐心等待...",
                 Toast.LENGTH_LONG).show();
+    }
+
+    public static void dayHistory(BeanTabMessage day, Calendar calendar, int id) {
+        String strUrl = RequestUtil.combineUrl((Calendar) calendar.clone());
+        RequestDayHistory request = new RequestDayHistory(day, id, 0);
+        request.execute(strUrl);
     }
 
     private static Timer requestDayTimer = new Timer();
@@ -78,5 +73,11 @@ public class RequestDay {
             }
             super.handleMessage(msg);
         }
+    }
+
+    public static void dayStep(BeanTabMessage day, Calendar calendar) {
+        String strUrl = RequestUtil.combineUrl((Calendar) calendar.clone());
+        RequestDayStep request = new RequestDayStep(day, 0);
+        request.execute(strUrl);
     }
 }

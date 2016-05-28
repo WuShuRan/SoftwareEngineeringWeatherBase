@@ -9,6 +9,7 @@ import ubibots.zuccweatherbase.R;
 import ubibots.zuccweatherbase.displayhistory.ui.DisplayView;
 
 public class DisplayHistoryActivity extends Activity {
+
     private static Context context;
     private static DisplayHistoryActivity activity;
 

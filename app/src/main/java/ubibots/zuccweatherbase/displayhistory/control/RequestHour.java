@@ -16,22 +16,11 @@ import ubibots.zuccweatherbase.displayhistory.ui.HourView;
 import ubibots.zuccweatherbase.displayhistory.util.RequestUtil;
 
 public class RequestHour {
+
     private static RequestHourHandler requestHourHandler;
 
     public RequestHour(){
         requestHourHandler = new RequestHourHandler();
-    }
-
-    public static void hourHistory(BeanTabMessage hour, Calendar calendar, int id) {
-        String strUrl = RequestUtil.combineUrl((Calendar) calendar.clone());
-        RequestHourHistory request = new RequestHourHistory(hour, id, 0);
-        request.execute(strUrl);
-    }
-
-    public static void hourStep(BeanTabMessage hour, Calendar calendar) {
-        String strUrl=RequestUtil.combineUrl((Calendar) calendar.clone());
-        RequestHourStep request = new RequestHourStep(hour, 0);
-        request.execute(strUrl);
     }
 
     public void executeRequest(){
@@ -50,10 +39,14 @@ public class RequestHour {
                 Toast.LENGTH_LONG).show();
     }
 
+    public static void hourHistory(BeanTabMessage hour, Calendar calendar, int id) {
+        String strUrl = RequestUtil.combineUrl((Calendar) calendar.clone());
+        RequestHourHistory request = new RequestHourHistory(hour, id, 0);
+        request.execute(strUrl);
+    }
 
     private static Timer requestHourTimer = new Timer();
     private static TimerTask requestHourTask = new TimerTask() {
-
         @Override
         public void run() {
             // 需要做的事:发送消息
@@ -79,5 +72,11 @@ public class RequestHour {
             }
             super.handleMessage(msg);
         }
+    }
+
+    public static void hourStep(BeanTabMessage hour, Calendar calendar) {
+        String strUrl=RequestUtil.combineUrl((Calendar) calendar.clone());
+        RequestHourStep request = new RequestHourStep(hour, 0);
+        request.execute(strUrl);
     }
 }

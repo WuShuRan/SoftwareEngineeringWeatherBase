@@ -19,13 +19,14 @@ import java.util.List;
 import lecho.lib.hellocharts.gesture.ContainerScrollType;
 import lecho.lib.hellocharts.gesture.ZoomType;
 import lecho.lib.hellocharts.view.LineChartView;
+
 import ubibots.zuccweatherbase.R;
 import ubibots.zuccweatherbase.displayhistory.DisplayHistoryActivity;
 import ubibots.zuccweatherbase.displayhistory.model.BeanLineView;
 import ubibots.zuccweatherbase.displayhistory.model.BeanTabMessage;
 
-
 public class HourView {
+
     private static BeanLineView hourBeanLineView;
     private static BeanTabMessage hour;
     private static List<View> hourViewList;
@@ -54,39 +55,7 @@ public class HourView {
         HourView.hour = hour;
     }
 
-    private PagerAdapter hourPagerAdapter = new PagerAdapter() {
-        //官方建议这么写
-        @Override
-        public boolean isViewFromObject(View arg0, Object arg1) {
-            return arg0 == arg1;
-        }
-
-        //返回一共有多少个界面
-        @Override
-        public int getCount() {
-            return hourViewList.size();
-        }
-
-        //实例化一个item
-        @Override
-        public Object instantiateItem(ViewGroup container, int position) {
-            container.addView(hourViewList.get(position));
-            return hourViewList.get(position);
-        }
-
-        //销毁一个item
-        @Override
-        public void destroyItem(ViewGroup container, int position, Object object) {
-            container.removeView(hourViewList.get(position));
-        }
-
-    };
-
     public HourView() {
-        hourViewInit();
-    }
-
-    private void hourViewInit() {
         hourViewPager = (ViewPager) DisplayHistoryActivity.getActivity().findViewById(R.id.hourView);
         hourViewList = new ArrayList<>();
         View view1 = View.inflate(DisplayHistoryActivity.getContext(), R.layout.temperaturehour, null);
@@ -106,6 +75,33 @@ public class HourView {
         hourBeanLineView = new BeanLineView(temperatureHourView, humidityHourView);
 
         initHourDots();
+        PagerAdapter hourPagerAdapter = new PagerAdapter() {
+            //官方建议这么写
+            @Override
+            public boolean isViewFromObject(View arg0, Object arg1) {
+                return arg0 == arg1;
+            }
+
+            //返回一共有多少个界面
+            @Override
+            public int getCount() {
+                return hourViewList.size();
+            }
+
+            //实例化一个item
+            @Override
+            public Object instantiateItem(ViewGroup container, int position) {
+                container.addView(hourViewList.get(position));
+                return hourViewList.get(position);
+            }
+
+            //销毁一个item
+            @Override
+            public void destroyItem(ViewGroup container, int position, Object object) {
+                container.removeView(hourViewList.get(position));
+            }
+
+        };
         hourViewPager.setAdapter(hourPagerAdapter);
         hourViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
