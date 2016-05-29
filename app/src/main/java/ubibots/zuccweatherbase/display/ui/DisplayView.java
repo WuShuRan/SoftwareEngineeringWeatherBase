@@ -1,6 +1,6 @@
-package ubibots.zuccweatherbase.displayhistory.ui;
+package ubibots.zuccweatherbase.display.ui;
 
-import ubibots.zuccweatherbase.displayhistory.control.RequestHour;
+import ubibots.zuccweatherbase.display.control.RequestHour;
 
 public class DisplayView {
 
@@ -8,6 +8,7 @@ public class DisplayView {
         new HourView();
         new RequestHour().executeRequest();
         new DayView();
+        new RecommandView();
         new ListTab();
     }
 }

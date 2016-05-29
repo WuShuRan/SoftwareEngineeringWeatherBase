@@ -1,4 +1,4 @@
-package ubibots.zuccweatherbase.displayhistory;
+package ubibots.zuccweatherbase.display;
 
 import android.app.Activity;
 import android.content.Context;
@@ -6,7 +6,7 @@ import android.os.Bundle;
 import android.view.WindowManager;
 
 import ubibots.zuccweatherbase.R;
-import ubibots.zuccweatherbase.displayhistory.ui.DisplayView;
+import ubibots.zuccweatherbase.display.ui.DisplayView;
 
 public class DisplayHistoryActivity extends Activity {
 

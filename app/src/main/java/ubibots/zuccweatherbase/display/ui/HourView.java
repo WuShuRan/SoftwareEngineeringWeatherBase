@@ -1,4 +1,4 @@
-package ubibots.zuccweatherbase.displayhistory.ui;
+package ubibots.zuccweatherbase.display.ui;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -21,9 +21,9 @@ import lecho.lib.hellocharts.gesture.ZoomType;
 import lecho.lib.hellocharts.view.LineChartView;
 
 import ubibots.zuccweatherbase.R;
-import ubibots.zuccweatherbase.displayhistory.DisplayHistoryActivity;
-import ubibots.zuccweatherbase.displayhistory.model.BeanLineView;
-import ubibots.zuccweatherbase.displayhistory.model.BeanTabMessage;
+import ubibots.zuccweatherbase.display.DisplayHistoryActivity;
+import ubibots.zuccweatherbase.display.model.BeanLineView;
+import ubibots.zuccweatherbase.display.model.BeanTabMessage;
 
 public class HourView {
 

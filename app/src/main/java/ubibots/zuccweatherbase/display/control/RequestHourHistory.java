@@ -1,6 +1,7 @@
-package ubibots.zuccweatherbase.displayhistory.control;
+package ubibots.zuccweatherbase.display.control;
 
 import android.os.AsyncTask;
+import android.view.View;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
@@ -13,20 +14,22 @@ import java.util.Locale;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import ubibots.zuccweatherbase.displayhistory.model.BeanConstant;
-import ubibots.zuccweatherbase.displayhistory.model.BeanTabMessage;
-import ubibots.zuccweatherbase.displayhistory.ui.DayView;
-import ubibots.zuccweatherbase.displayhistory.util.RequestUtil;
+import ubibots.zuccweatherbase.display.model.BeanConstant;
+import ubibots.zuccweatherbase.display.model.BeanTabMessage;
+import ubibots.zuccweatherbase.display.ui.HourView;
+import ubibots.zuccweatherbase.display.util.RequestUtil;
 
-public class RequestDayStep extends AsyncTask<String, Integer, String> {
+public class RequestHourHistory extends AsyncTask<String, Integer, String> {
 
-    public final static int MAX = 48;
-    private BeanTabMessage day;
+    public final static int MAX = 120;
+    private BeanTabMessage hour;
+    private int id;
     private String strURL;
     private int time;
 
-    public RequestDayStep(BeanTabMessage day, int time) {
-        this.day = day;
+    public RequestHourHistory(BeanTabMessage hour, int id, int time) {
+        this.hour = hour;
+        this.id = id;
         this.time = time;
     }
 
@@ -65,40 +68,48 @@ public class RequestDayStep extends AsyncTask<String, Integer, String> {
         if (result != null && time < BeanConstant.MAXTIME) {
             Pattern pattern = Pattern.compile("<TD>(.*?)</TD>");
             Matcher matcher = pattern.matcher(result);
+
             ArrayList<String> tmp = new ArrayList<>();
             while (matcher.find()) {
                 tmp.add(matcher.group(1));
             }
+
             if (tmp.size() >= 3) {
                 String dateString = tmp.get(0);
                 double temp = Double.valueOf(tmp.get(1));
                 double humi = Double.valueOf(tmp.get(2));
 
                 //丢包重发
-                if (dateString.length() != 24 || temp <= 0 || humi <= 0) {
-                    reconnect(strURL, day);
+                if (dateString.length() != 24 || temp < 0 || humi < 0) {
+                    reconnect(strURL, hour, id);
                     return;
                 }
 
                 dateString = dateString.substring(0, 10) + " " + dateString.substring(11, 23);
                 Calendar calendar = RequestUtil.dateToCalender(dateString,"yyyy-MM-dd HH:mm:ss.SSS");
                 calendar.set(Calendar.HOUR_OF_DAY, calendar.get(Calendar.HOUR_OF_DAY) + 8);
-                SimpleDateFormat sdf = new SimpleDateFormat("dd HH:mm", Locale.getDefault());
+                SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss", Locale.getDefault());
                 dateString = sdf.format(calendar.getTime());
 
-                day.getDate().remove(0);
-                day.getDate().add(dateString);
-                day.getTemperature().remove(0);
-                day.getTemperature().add(temp);
-                day.getHumidity().remove(0);
-                day.getHumidity().add(humi);
+                hour.getDate().set(id, dateString);
+                hour.getTemperature().set(id, temp);
+                hour.getHumidity().set(id, humi);
+                hour.count++;
 
-                //刷新界面
-                RequestUtil.reflashLineView(DayView.getDayBeanLineView(), day, "日 时:分");
+                //历史数据收集完毕
+                if (hour.count == MAX) {
+                    //刷新界面
+                    RequestUtil.reflashLineView(HourView.getHourBeanLineView(), hour, "时:分:秒");
 
-                System.out.println("Time: " + day.getDate().get(MAX - 1) + " " + "Temperature: " + day.getTemperature().get(MAX - 1) + " " + "Humidity: " + day.getHumidity().get(MAX - 1) + " " + "Time: " + time);
+                    RequestHour.getRequestHourTimer().schedule(RequestHour.getRequestHourTask(), BeanConstant.delayHour, BeanConstant.delayHour);
+                    HourView.getHourProgressBar().setVisibility(View.GONE);
+
+                    new RequestDay().executeRequest();
+                }
+                HourView.getHourProgressBar().setProgress(100 * hour.count / MAX);
+                System.out.println("Time: " + hour.getDate().get(id) + " " + "Temperature: " + hour.getTemperature().get(id) + " " + "Humidity: " + hour.getHumidity().get(id) + " " + "Num: " + id + " " + "Count: " + hour.count + " " + "Time: " + time);
             } else {//丢包重发
-                reconnect(strURL, day);
+                reconnect(strURL, hour, id);
             }
         } else {
             RequestUtil.connectFailed();
@@ -110,8 +121,8 @@ public class RequestDayStep extends AsyncTask<String, Integer, String> {
     protected void onPreExecute() {
     }
 
-    public void reconnect(String strURL, BeanTabMessage day) {
-        RequestDayStep another = new RequestDayStep(day, time + 1);
+    public void reconnect(String strURL, BeanTabMessage hour, int id) {
+        RequestHourHistory another = new RequestHourHistory(hour, id, time + 1);
         System.out.println("time: " + time);
         System.out.println(strURL);
         another.execute(strURL);

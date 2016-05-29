@@ -12,7 +12,7 @@ import java.util.concurrent.ExecutionException;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import ubibots.zuccweatherbase.displayhistory.DisplayHistoryActivity;
+import ubibots.zuccweatherbase.display.DisplayHistoryActivity;
 import ubibots.zuccweatherbase.registandlogin.RegistAndLoginActivity;
 import ubibots.zuccweatherbase.registandlogin.intrfc.IUserManager;
 import ubibots.zuccweatherbase.registandlogin.ui.FrmLogin;
@@ -46,7 +46,6 @@ public class UserManager implements IUserManager {
 
     public class ExecuteLogin extends AsyncTask<String, Integer, String> {
         //该方法并不运行在UI线程当中，主要用于异步操作，所有在该方法中不能对UI当中的空间进行设置和修改
-        String testResult = null;
 
         @Override
         protected String doInBackground(String... params) {
@@ -97,7 +96,6 @@ public class UserManager implements IUserManager {
         //在doInBackground方法执行结束之后在运行，并且运行在UI线程当中 可以对UI空间进行设置
         @Override
         protected void onPostExecute(String result) {
-            testResult = result;
             if (RegistAndLoginActivity.getContext() != null) {
                 Toast.makeText(RegistAndLoginActivity.getContext(), result, Toast.LENGTH_SHORT).show();
             }

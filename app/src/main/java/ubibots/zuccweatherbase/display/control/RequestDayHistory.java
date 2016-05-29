@@ -1,4 +1,4 @@
-package ubibots.zuccweatherbase.displayhistory.control;
+package ubibots.zuccweatherbase.display.control;
 
 import android.os.AsyncTask;
 import android.view.View;
@@ -14,10 +14,10 @@ import java.util.Locale;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import ubibots.zuccweatherbase.displayhistory.model.BeanConstant;
-import ubibots.zuccweatherbase.displayhistory.model.BeanTabMessage;
-import ubibots.zuccweatherbase.displayhistory.ui.DayView;
-import ubibots.zuccweatherbase.displayhistory.util.RequestUtil;
+import ubibots.zuccweatherbase.display.model.BeanConstant;
+import ubibots.zuccweatherbase.display.model.BeanTabMessage;
+import ubibots.zuccweatherbase.display.ui.DayView;
+import ubibots.zuccweatherbase.display.util.RequestUtil;
 
 public class RequestDayHistory extends AsyncTask<String, Integer, String> {
 

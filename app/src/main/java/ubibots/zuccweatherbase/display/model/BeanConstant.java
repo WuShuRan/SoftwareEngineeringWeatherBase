@@ -1,4 +1,4 @@
-package ubibots.zuccweatherbase.displayhistory.model;
+package ubibots.zuccweatherbase.display.model;
 
 public class BeanConstant {
 

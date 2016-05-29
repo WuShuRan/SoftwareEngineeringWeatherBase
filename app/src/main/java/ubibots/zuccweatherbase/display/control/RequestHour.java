@@ -1,5 +1,6 @@
-package ubibots.zuccweatherbase.displayhistory.control;
+package ubibots.zuccweatherbase.display.control;
 
+import android.os.AsyncTask;
 import android.os.Handler;
 import android.os.Message;
 import android.widget.Toast;
@@ -9,11 +10,11 @@ import java.util.Calendar;
 import java.util.Timer;
 import java.util.TimerTask;
 
-import ubibots.zuccweatherbase.displayhistory.DisplayHistoryActivity;
-import ubibots.zuccweatherbase.displayhistory.model.BeanConstant;
-import ubibots.zuccweatherbase.displayhistory.model.BeanTabMessage;
-import ubibots.zuccweatherbase.displayhistory.ui.HourView;
-import ubibots.zuccweatherbase.displayhistory.util.RequestUtil;
+import ubibots.zuccweatherbase.display.DisplayHistoryActivity;
+import ubibots.zuccweatherbase.display.model.BeanConstant;
+import ubibots.zuccweatherbase.display.model.BeanTabMessage;
+import ubibots.zuccweatherbase.display.ui.HourView;
+import ubibots.zuccweatherbase.display.util.RequestUtil;
 
 public class RequestHour {
 
@@ -42,7 +43,7 @@ public class RequestHour {
     public static void hourHistory(BeanTabMessage hour, Calendar calendar, int id) {
         String strUrl = RequestUtil.combineUrl((Calendar) calendar.clone());
         RequestHourHistory request = new RequestHourHistory(hour, id, 0);
-        request.execute(strUrl);
+        request.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, strUrl);
     }
 
     private static Timer requestHourTimer = new Timer();
@@ -77,6 +78,6 @@ public class RequestHour {
     public static void hourStep(BeanTabMessage hour, Calendar calendar) {
         String strUrl=RequestUtil.combineUrl((Calendar) calendar.clone());
         RequestHourStep request = new RequestHourStep(hour, 0);
-        request.execute(strUrl);
+        request.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, strUrl);
     }
 }

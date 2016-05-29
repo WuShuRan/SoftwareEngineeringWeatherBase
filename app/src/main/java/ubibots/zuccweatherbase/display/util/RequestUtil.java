@@ -1,4 +1,4 @@
-package ubibots.zuccweatherbase.displayhistory.util;
+package ubibots.zuccweatherbase.display.util;
 
 import android.graphics.Color;
 import android.widget.Toast;
@@ -17,9 +17,9 @@ import lecho.lib.hellocharts.model.Line;
 import lecho.lib.hellocharts.model.LineChartData;
 import lecho.lib.hellocharts.model.PointValue;
 
-import ubibots.zuccweatherbase.displayhistory.model.BeanConstant;
-import ubibots.zuccweatherbase.displayhistory.model.BeanLineView;
-import ubibots.zuccweatherbase.displayhistory.model.BeanTabMessage;
+import ubibots.zuccweatherbase.display.model.BeanConstant;
+import ubibots.zuccweatherbase.display.model.BeanLineView;
+import ubibots.zuccweatherbase.display.model.BeanTabMessage;
 import ubibots.zuccweatherbase.registandlogin.RegistAndLoginActivity;
 
 public class RequestUtil {
