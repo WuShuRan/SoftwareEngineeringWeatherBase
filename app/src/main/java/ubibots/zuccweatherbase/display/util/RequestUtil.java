@@ -240,14 +240,14 @@ public class RequestUtil {
         axisY1 = new Axis();//Y1÷·
         axisY1.setHasLines(true);
         axisY1.setTextColor(Color.WHITE);
-        axisY1.setName("…„ œ∂»/°Ê");
+        axisY1.setName(" ™∂»/%RH");
         axisY1.setMaxLabelChars(4);
         humidityData.setAxisYLeft(axisY1);
 
-        axisY2 = new Axis();//Y2÷·
+        axisY2 = new Axis();//Y2÷·0
         axisY2.setHasLines(true);
         axisY2.setTextColor(Color.WHITE);
-        axisY2.setName("…„ œ∂»/°Ê");
+        axisY2.setName(" ™∂»/%RH");
         axisY2.setMaxLabelChars(4);
         humidityData.setAxisYRight(axisY2);
         lineView.getHumidityView().setLineChartData(humidityData);

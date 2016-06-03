@@ -4,17 +4,22 @@ import android.graphics.Color;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import ubibots.zuccweatherbase.R;
 import ubibots.zuccweatherbase.display.DisplayHistoryActivity;
+import ubibots.zuccweatherbase.display.control.UpdateRecommand;
 
 public class ListTab {
 
     private int currentTab;
     private ListView listView;
+    private TextView tempView;
+    private TextView humiView;
 
     public int getCurrentTab() {
         return currentTab;
@@ -25,6 +30,9 @@ public class ListTab {
     }
 
     public ListTab() {
+        tempView = (TextView) DisplayHistoryActivity.getActivity().findViewById(R.id.imageView);
+        humiView = (TextView) DisplayHistoryActivity.getActivity().findViewById(R.id.imageView2);
+
         listView = (ListView) DisplayHistoryActivity.getActivity().findViewById(R.id.listview);
         listView.setBackgroundColor(Color.GRAY);
         listView.setCacheColorHint(0);
@@ -46,7 +54,8 @@ public class ListTab {
                     currentTab = 1;
                     break;
                 case "活动推荐":
-
+                    recommandVisable();
+                    currentTab = 2;
                     break;
             }
         });
@@ -58,9 +67,16 @@ public class ListTab {
         if (HourView.getHourViewPager() != null) {
             HourView.getHourViewPager().setVisibility(View.VISIBLE);
             dayInvisible();
-            if (HourView.getHourProgressBar().getVisibility() != View.GONE) {
-                HourView.getHourProgressBar().setVisibility(View.VISIBLE);
-            }
+            recommandInVisable();
+        }
+        if (HourView.getHourProgressBar().getVisibility() != View.GONE) {
+            HourView.getHourProgressBar().setVisibility(View.VISIBLE);
+        }
+        if (tempView != null) {
+            tempView.setVisibility(View.VISIBLE);
+        }
+        if (humiView != null) {
+            humiView.setVisibility(View.VISIBLE);
         }
     }
 
@@ -77,9 +93,16 @@ public class ListTab {
         if (DayView.getDayViewPager() != null) {
             DayView.getDayViewPager().setVisibility(View.VISIBLE);
             hourInvisible();
-            if (DayView.getDayProgressBar().getVisibility() != View.GONE) {
-                DayView.getDayProgressBar().setVisibility(View.VISIBLE);
-            }
+            recommandInVisable();
+        }
+        if (DayView.getDayProgressBar().getVisibility() != View.GONE) {
+            DayView.getDayProgressBar().setVisibility(View.VISIBLE);
+        }
+        if (tempView != null) {
+            tempView.setVisibility(View.VISIBLE);
+        }
+        if (humiView != null) {
+            humiView.setVisibility(View.VISIBLE);
         }
     }
 
@@ -89,6 +112,32 @@ public class ListTab {
             if (DayView.getDayProgressBar().getVisibility() != View.GONE) {
                 DayView.getDayProgressBar().setVisibility(View.INVISIBLE);
             }
+        }
+    }
+
+    private void recommandVisable() {
+        if (RecommandView.getRecommand() != null) {
+            RecommandView.getRecommand().setVisibility(View.VISIBLE);
+            if (HourView.getHourProgressBar().getVisibility() == View.GONE && DayView.getDayProgressBar().getVisibility() == View.GONE) {
+                new UpdateRecommand().compareData();
+            }
+            else{
+                Toast.makeText(DisplayHistoryActivity.getContext(), "请耐心等待数据获取完毕", Toast.LENGTH_SHORT).show();
+            }
+            hourInvisible();
+            dayInvisible();
+        }
+        if (tempView != null) {
+            tempView.setVisibility(View.INVISIBLE);
+        }
+        if (humiView != null) {
+            humiView.setVisibility(View.INVISIBLE);
+        }
+    }
+
+    private void recommandInVisable() {
+        if (RecommandView.getRecommand() != null) {
+            RecommandView.getRecommand().setVisibility(View.INVISIBLE);
         }
     }
 }

@@ -15,6 +15,7 @@ public class RecommandView {
 
     public RecommandView(){
         recommand = (ListView) DisplayHistoryActivity.getActivity().findViewById(R.id.recommandList);
+        recommand.setCacheColorHint(0);
         recommand.setClickable(false);
     }
 }

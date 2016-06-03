@@ -3,7 +3,7 @@ package ubibots.zuccweatherbase.registandlogin.util;
 import java.sql.Connection;
 
 public class DBUtil {
-    private static final String jdbcUrl="jdbc:mysql://10.66.15.150:3306/weatherbase?useUnicode=true&characterEncoding=UTF-8&useSSL=true&connectTimeout=10000";
+    private static final String jdbcUrl="jdbc:mysql://10.66.15.150:3306/weatherbase?useUnicode=true&characterEncoding=UTF-8&useSSL=true&connectTimeout=5000&socketTimeout=5000";
     private static final String dbUser="root";
     private static final String dbPwd="zucc";
     static{

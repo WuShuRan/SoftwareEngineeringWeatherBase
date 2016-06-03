@@ -17,14 +17,17 @@ import ubibots.zuccweatherbase.display.ui.HourView;
 import ubibots.zuccweatherbase.display.ui.RecommandView;
 import ubibots.zuccweatherbase.registandlogin.util.DBUtil;
 
-public class UpdateRecommand implements IUpdateRecommand{
+public class UpdateRecommand implements IUpdateRecommand {
+
+    private float currentTemperature;
+    private float currentHumidity;
 
     @Override
     public void compareData() {
         try {
-            float currentTemperature = HourView.getHour().getTemperature().get(HourView.getHour().getTemperature().size()-1).floatValue();
-            float currentHumidity = HourView.getHour().getHumidity().get(HourView.getHour().getHumidity().size()-1).floatValue();
-            List<String> ret =  new ExecuteCompare().execute(currentTemperature,currentHumidity).get();
+            currentTemperature = HourView.getHour().getTemperature().get(HourView.getHour().getTemperature().size() - 1).floatValue();
+            currentHumidity = HourView.getHour().getHumidity().get(HourView.getHour().getHumidity().size() - 1).floatValue();
+            List<String> ret = new ExecuteCompare().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, currentTemperature, currentHumidity).get();
             ArrayAdapter<String> arrayAdapter = new ArrayAdapter<>(DisplayHistoryActivity.getActivity(), android.R.layout.simple_expandable_list_item_1, ret);
             RecommandView.getRecommand().setAdapter(arrayAdapter);
         } catch (InterruptedException | ExecutionException e) {
@@ -33,30 +36,31 @@ public class UpdateRecommand implements IUpdateRecommand{
     }
 
     private class ExecuteCompare extends AsyncTask<Float, Integer, List<String>> {
-        //璇ユ柟娉曞苟涓嶈繍琛屽湪UI绾跨▼褰撲腑锛屼富瑕佺敤浜庡紓姝ユ搷浣滐紝鎵�鏈夊湪璇ユ柟娉曚腑涓嶈兘瀵筓I褰撲腑鐨勭┖闂磋繘琛岃缃拰淇敼
+        //该方法并不运行在UI线程当中，主要用于异步操作，所有在该方法中不能对UI当中的空间进行设置和修改
 
         @Override
         protected List<String> doInBackground(Float... params) {
             List<String> ret = new ArrayList<>();
+            ret.add("温度: " + currentTemperature + " " + "湿度: " + currentHumidity + "\n");
             Connection conn = null;
-            try{
+            try {
                 conn = DBUtil.getConnection();
                 String sql = "select activityname from beanrecommandactivity " +
                         "where uptemperature > ? and downtemperature < ?" +
                         "and uphumidity > ? and downhumidity < ?";
                 PreparedStatement pst = conn.prepareStatement(sql);
-                pst.setFloat(1,params[0]);
-                pst.setFloat(2,params[0]);
-                pst.setFloat(3,params[1]);
-                pst.setFloat(4,params[1]);
+                pst.setFloat(1, params[0]);
+                pst.setFloat(2, params[0]);
+                pst.setFloat(3, params[1]);
+                pst.setFloat(4, params[1]);
                 ResultSet rs = pst.executeQuery();
-                while(rs.next()){
+                while (rs.next()) {
                     ret.add(rs.getString(1));
                 }
-                if(ret.size()==0){
-                    ret.add("鎶辨瓑锛屾殏鏃舵病鏈夊缓璁殑娲诲姩");
+                if (ret.size() == 1) {
+                    ret.add("抱歉，暂时没有建议的活动");
                 }
-            }catch (SQLException e) {
+            } catch (SQLException e) {
                 e.printStackTrace();
             } finally {
                 if (conn != null) {
@@ -70,7 +74,7 @@ public class UpdateRecommand implements IUpdateRecommand{
             return ret;
         }
 
-        //鍦╠oInBackground鏂规硶鎵ц缁撴潫涔嬪悗鍦ㄨ繍琛岋紝骞朵笖杩愯鍦║I绾跨▼褰撲腑 鍙互瀵筓I绌洪棿杩涜璁剧疆
+        //在doInBackground方法执行结束之后在运行，并且运行在UI线程当中 可以对UI空间进行设置
         @Override
         protected void onPostExecute(List<String> result) {
         }

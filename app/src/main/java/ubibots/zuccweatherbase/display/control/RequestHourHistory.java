@@ -105,6 +105,7 @@ public class RequestHourHistory extends AsyncTask<String, Integer, String> {
                     HourView.getHourProgressBar().setVisibility(View.GONE);
 
                     new RequestDay().executeRequest();
+                    new UpdateRecommand();
                 }
                 HourView.getHourProgressBar().setProgress(100 * hour.count / MAX);
                 System.out.println("Time: " + hour.getDate().get(id) + " " + "Temperature: " + hour.getTemperature().get(id) + " " + "Humidity: " + hour.getHumidity().get(id) + " " + "Num: " + id + " " + "Count: " + hour.count + " " + "Time: " + time);
